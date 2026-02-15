@@ -1,0 +1,36 @@
+Deploy the Frontend Dashboard via CloudFormation
+
+
+Step-by-Step Instructions
+
+Step 1: Create the CloudFormation Template
+Create a file named dashboard.yml in youe local device and paste the following:
+(check dashboard.yml file)
+
+Step 2: Deploy via AWS Console
+Go to CloudFormation in the AWS Console
+Click Create stack
+Under Prepare template
+Select: Choose an existing template (default)
+Under Specify template
+Template source: Select Upload a template file
+Upload: Click Choose file and select the dashboard.yml file you created earlier
+Click “Next” to proceed
+Stack name: chatops-dashboard-stack > Click Next
+Leave all settings at default → Click “Next” again
+On the final screen Click Submit and Create stack
+
+
+
+Step 3: Upload Your HTML File to S3
+Once the stack is deployed:
+Go to S3, a bucket will get created with Cloudformation template (e.g., chatops-frontend-252366102382-us-east-2)
+Click Upload > Add files
+Upload your index.html file
+
+After upload completes, open the CloudFront URL from your CloudFormation Outputs
+
+What You’ve Built
+A frontend dashboard hosted on S3 and delivered via CloudFront
+Infrastructure was deployed using CloudFormation for automation and consistency
+A public, read-only UI that reflects your cloud alerts and actions

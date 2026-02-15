@@ -1,0 +1,63 @@
+Step 1: Launch a Test EC2 Instance
+We need a running EC2 instance to monitor. If you already have one, you can skip this step.
+Go to EC2 Console
+Click Launch Instance
+Name: chatopsbot-test-instance
+AMI: Amazon Linux 2
+Instance type: t2.micro (or t3.micro for burstable CPU)
+Key pair: Select existing or create new (you'll SSH in later)
+Under Network Settings: Use default VPC
+Enable SSH access (port 22)
+Click Launch Instance
+We’ll simulate a high CPU load on this instance in a later step
+
+
+Step 2: Create a CloudWatch Alarm
+CloudWatch will monitor CPU usage, and when it goes above a certain threshold, it will trigger an alert.
+Open the CloudWatch Console
+From the left menu → click Alarms → Select All Alarms
+Click Create Alarm
+Under Select Metric: Choose Browse
+Navigate:EC2 > Per-Instance Metrics > CPUUtilization
+Select your instance from the list
+Click Select Metric
+
+Set alarm conditions:
+Period: 1 minute
+Threshold Type: Static
+Whenever CPUUtilization is...:Greater than 70
+For...:2 out of 2 evaluation periods (2 minutes total)
+
+Under Notification: Choose: Send a notification to an SNS topic
+Select existing topic: slack-alerts-topic
+This topic is already connected to Slack via AWS Chatbot
+
+Click Next
+Name the alarm something like: HighCPUAlert
+Review and click Create Alarm
+
+
+
+Step 3: Simulate a CPU Spike
+To test if the alarm works, we’ll intentionally generate CPU load on the EC2 instance.
+SSH into the EC2 instance:
+ssh -i your-key.pem ec2-user@your-instance-public-ip
+Install the stress tool:
+sudo yum install -y stress
+Run the stress command:
+stress --cpu 2 --timeout 300
+This command keeps 2 CPU cores busy for 5 minutes
+
+Wait a few minutes, then:
+Go back to CloudWatch > Alarms
+Alarm should enter ALARM state
+Message is published to SNS topic
+Appears in Slack via Chatbo
+
+
+
+Step 4: Query the Alarm from Slack
+Once the alert is triggered, you can also verify its status directly from Slack using AWS Chatbot.
+In your connected Slack channel (e.g., #new-channel), type:(change the region accordingly)
+@Amazon Q cloudwatch describe-alarms --state-value ALARM --region us-east-2
+

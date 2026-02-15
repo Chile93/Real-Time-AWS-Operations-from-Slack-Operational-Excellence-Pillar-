@@ -1,0 +1,62 @@
+Step 1: Create a Lambda Function for Automation
+Go to the AWS Lambda Console
+Click Create function
+Choose Author from scratch
+Provide:
+Function name: RestartMyLambda
+Runtime: Python 3.13 (or Node.js if preferred)
+Click Create function
+This function will act as a command you can trigger from Slack.
+
+
+Step 2: Add Function Code to Perform the Task
+Once the function is created, scroll down to the Code source section.
+Replace the default code with the following:
+def lambda_handler(event, context):
+    return {
+        'statusCode': 200,
+        'body': 'Lambda triggered from Slack via AWS Chatbot.'
+    }
+Click Deploy to save the code.
+
+
+
+Step 3: Add Permissions for Chatbot to Invoke Lambda
+Open the IAM Console.
+Find the IAM role used by your AWS Chatbot setup, likely named awschatbot-role
+Open the role, and scroll down to the Permissions policies section.
+Click Add permissions > Create inline policy.
+Choose the JSON tab, and paste this policy:
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "lambda:*",
+      "Resource": "*"
+    }
+  ]
+}
+
+Click Review policy > give it a name like AllowInvokeRestartLambda > click Create policy.
+
+
+
+Step 4: Invoke Lambda Function from Slack
+Before you can interact with AWS resources from Slack, make sure the Amazon Q (formerly AWS Chatbot) is invited to your Slack channel.
+
+Invite Amazon Q to Your Slack Channel
+
+Open your Slack workspace and go to the configured channel (e.g., #new-channel).
+In the message bar, type:
+/invite @Amazon Q
+You can now invoke your Lambda function from Slack using AWS Chatbot’s /aws command.
+In the Slack channel, run:
+@Amazon Q lambda list-functions --region us-east-1
+Amazon Q will return a list of available Lambda functions. If you see your function name (e.g., RestartMyLambda), you're good to go.
+
+In the Slack channel, Invoke the Lambda function:
+@Amazon Q lambda invoke --function-name RestartMyLambda --payload '{}'
+If everything is set up correctly:
+Amazon Q will execute the Lambda function
+You’ll see a response in Slack confirming success

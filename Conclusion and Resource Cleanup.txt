@@ -1,0 +1,41 @@
+Conclusion and Resource Cleanup
+
+
+What You’ve Built
+Connected Slack with AWS Chatbot for real-time alerts and commands
+Set up IAM roles to securely allow AWS CLI access from Slack
+Created CloudWatch alarms and routed them to Slack via EventBridge
+Built Lambda functions that can restart services or fetch logs on command
+Deployed a read-only frontend dashboard to show alerts and activity
+Used CloudFormation to automate and organize the entire setup
+Practiced principles from the Operational Excellence pillar
+This isn’t just a project, it’s a solid foundation for ChatOps in real environments.
+
+
+
+Clean-up Steps
+To avoid ongoing AWS charges, remember to delete what you created:
+
+1. Chatbot Setup
+
+Go to AWS Chatbot, remove the Slack channel configuration
+2. IAM Role
+
+Head to IAM > Roles, find the chatbot role, and delete it
+3. CloudWatch
+
+Delete your alarms
+4. EC2 Compute ****
+
+Terminate your EC2 instance that was used to stress test
+5. Lambda Functions
+
+Delete the functions you created
+Also clean up log groups in CloudWatch Logs
+6. Frontend Dashboard
+
+Empty and delete the S3 bucket
+Disable and delete the CloudFront distribution
+7. CloudFormation Stack
+
+If you used a stack to deploy resources, go to CloudFormation and delete it

@@ -1,0 +1,79 @@
+Connect Slack with AWS Chatbot
+
+Step 1: Create or Use a Slack Workspace
+Slack is where all alerts and commands will appear, so we start by preparing the workspace.
+If you don’t have a Slack workspace:
+
+Go to https://slack.com/get-started
+Sign in with your email or create a Slack account
+Follow the steps to:
+Create a new workspace
+Set your workspace name (e.g., ChatOps Team)
+
+
+Step 2: Enable AWS Chatbot for Slack
+This step connects your AWS account to Slack, allowing communication between them.
+Open the AWS Chatbot Console:
+https://console.aws.amazon.com/chatbot/home?region=us-east-1
+Choose Slack as the chat client
+
+Click “Configure new client”
+You’ll be redirected to Slack:
+Select your workspace
+Grant permission to connect AWS Chatbot to your workspace
+After approval, you'll be redirected back to the AWS Console
+This gives AWS the ability to post messages in your Slack channels
+
+
+Step 3: Create an SNS Topic for Slack Alerts
+SNS acts as a message broker. We’ll use it to send alerts from AWS services (like CloudWatch) to Slack.
+Go to the SNS Console:
+Click Topics in the left menu
+Click “Create topic”
+Choose Standard as the topic type
+Enter a name for the topic (e.g., slack-alerts-topic)
+Leave other settings as default and click “Create topic”
+(Optional) Add an Email Subscription
+This helps you test that your SNS topic works before connecting it to Slack:
+
+Click Create subscription
+Set protocol to Email
+Enter your email address
+
+Click Create Subscription and ****Confirm subscription from your email
+
+
+Step 4: Configure the Slack Channel in AWS Chatbot
+Now we tell AWS which Slack channel to use, and what alerts or commands it’s allowed to handle.
+Back in the AWS Chatbot console, click “Configure new channel”
+Fill in the form:
+Configuration name**: chatops**
+Channel type: Keep it as Public.
+Channel: From the dropdown, select your existing channel → #new-channel.
+(If it doesn't show up, make sure the AWS Chatbot app is invited to the channel in Slack)
+
+IAM Role Configuration:
+Select “Create an IAM role using a template” from the dropdown
+Set the Role name to awschatbot-role
+Under Policy templates, check the following two options:
+Notification permissions: Allows Chatbot to retrieve CloudWatch metrics and graphs
+Amazon Q Developer access permissions: Enables interactions from Slack without full administrator access
+
+In the Guardrail policies section:
+Allow AWSLambda_FullAccess and ReadOnlyAccess
+In the Notifications section:
+Choose the Region where SNS topic exist (e.g., us-east-1)
+Select an existing SNS topic (e.g., slack-alerts-topic)
+If you haven’t created one yet, go to Amazon SNS Console and create a topic (do not forget to add a subscription)
+(Optional) Enable logging to CloudWatch if you want to audit usage
+Click Create and Save the configuration
+This completes the secure connection between AWS alerts and Slack
+
+
+Step 5: Test the Chatbot Integration
+Before we continue, let’s confirm that the connection works.
+In the Chatbot console, go to Configured Clients > Configured Channels
+Select your channel (e.g., chatops)
+
+Click Send test message
+Open Slack and check if a test message appears in #new-channel
