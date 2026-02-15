@@ -113,6 +113,10 @@ By the end of this project, you have:
 
 ---
 
+
+<img src="./coffee-site-image.png" alt="Front End View" width="800"/>
+
+---
 ## 🎉 Conclusion
 
 You’ve built a production‑grade serverless system that represents how modern cloud‑native applications operate today.
